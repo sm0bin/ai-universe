@@ -89,32 +89,38 @@
     </dialog>
 
     <dialog id="popupModal"
-        class="fixed top-0 right-0 w-full h-[100vh] bg-black/70 z-10 flex justify-center items-center">
+        class="fixed top-0 right-0 w-full h-[100vh] bg-black/70 z-10 flex justify-center items-center hidden">
 
-        <div id="modalContent"
-            class="relative p-32 rounded-2xl bg-white dark:bg-gray-900 w-[calc(100%-2rem)] lg:w-2/3 max-h-[calc(100%-2rem)]">
-            <button class="absolute -top-5 -right-5 bg-rose-500 w-10 h-10 rounded-full text-white z-30">✕</button>
-            <div class="grid grid-cols-2 gap-5">
-                <div class="p-8 rounded-2xl bg-rose-50 border-2 border-rose-500">
-                    <h2>ChatGPT is an AI-powered chatbot platform that uses OpenAI's GPT technology to simulate human
+        <div
+            class="relative p-5 md:p-12 lg:p-28 rounded-2xl bg-white dark:bg-gray-900 w-[calc(100%-4rem)] overflow-y-auto lg:overflow-visible lg:w-2/3 max-h-[calc(100%-4rem)]">
+            <button
+                class="absolute -top-6 -right-6 bg-rose-500 hover:bg-rose-600 w-12 h-12 rounded-full text-white z-30"
+                onclick="closeModal()">✕</button>
+            <div id="modalContent" class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <!--
+                <div class="p-5 md:p-8 rounded-2xl bg-rose-50 border-2 border-rose-500">
+                    <h2 class="font-semibold text-2xl text-slate-800 dark:text-slate-50 mb-6">ChatGPT is an AI-powered
+                        chatbot platform that uses OpenAI's GPT
+                        technology to simulate
+                        human
                         conversation.</h2>
-                    <div class="grid grid-cols-3 gap-4">
-                        <div class="rounded-2xl bg-slate-50 text-center p-5 w-full">
-                            <h5>$10/month
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="rounded-2xl bg-white text-center p-5 w-full">
+                            <h5 class="font-bold text-green-500">$10/month
                                 Basic</h5>
                         </div>
-                        <div class="rounded-2xl bg-slate-50 text-center p-5 w-full">
-                            <h5>$10/month
+                        <div class="rounded-2xl bg-white text-center p-5 w-full">
+                            <h5 class="font-bold text-orange-500">$10/month
                                 Basic</h5>
                         </div>
-                        <div class="rounded-2xl bg-slate-50 text-center p-5 w-full">
-                            <h5>$10/month
+                        <div class="rounded-2xl bg-white text-center p-5 w-full">
+                            <h5 class="font-bold text-red-500">$10/month
                                 Basic</h5>
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid  grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <h3>Features</h3>
+                            <h2 class="font-semibold text-2xl text-slate-800 dark:text-slate-50 mt-6 mb-4">Features</h2>
                             <ul class="list-disc list-inside">
                                 <li>Customizable responses</li>
                                 <li>Multilingual support</li>
@@ -122,7 +128,7 @@
                             </ul>
                         </div>
                         <div>
-                            <h3>Features</h3>
+                            <h2 class="font-semibold text-2xl text-slate-800 dark:text-slate-50 mt-6 mb-4">Features</h2>
                             <ul class="list-disc list-inside">
                                 <li>Customizable responses</li>
                                 <li>Multilingual support</li>
@@ -135,10 +141,21 @@
                     </div>
                 </div>
 
-                <div>
-
+                <div class="p-5 md:p-8 rounded-2xl border-2 border-slate-300">
+                    <figure class="relative">
+                        <img class="rounded-xl w-full h-64 object-cover"
+                            src="https://img.olhardigital.com.br/wp-content/uploads/2023/01/chatgpt_assistente.jpg"
+                            alt="">
+                        <div class="bg-rose-500 text-slate-50 px-4 py-2 rounded-lg absolute top-3 right-3">
+                            <p class="font-semibold">94% accuracy</p>
+                        </div>
+                    </figure>
+                    <h2 class="font-semibold text-2xl text-slate-800 dark:text-slate-50 mt-6 mb-4">Hi, how are you doing
+                        today?
+                    </h2>
+                    <p>I'm doing well, thank you for asking. How can I assist you today?</p>
                 </div>
-
+            -->
             </div>
         </div>
 

@@ -39,7 +39,7 @@ function showCards(data) {
                             <p>${element.published_in}</p>
                         </div>
                     </div>
-                    <button class="bg-slate-200 hover:bg-slate-500 p-3 rounded-full" onclick="fetchDetails(${element.id})">
+                    <button class="bg-slate-200 hover:bg-slate-500 p-3 rounded-full" onclick="fetchDetails('${element.id}')">
                         <svg class="fill-current text-slate-500 hover:text-slate-50"
                             xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
                             <path
@@ -67,8 +67,76 @@ function showDetails() {
 async function fetchDetails(id) {
     const res = await fetch(`https://openapi.programming-hero.com/api/ai/tool/${id}`);
     const json = await res.json();
-    console.log(id);
-    my_modal_3.showModal()
+    // console.log(id, typeof (id));
+    // console.log(json.data);
+    openModal(json.data)
 }
 
 fetchData()
+
+function openModal(data) {
+    console.log(data);
+    document.getElementById("popupModal").classList.remove("hidden");
+
+    // const modalBox = document.createElement("div");
+    // modalBox.classList = "grid grid-cols-1 lg:grid-cols-2 gap-5";
+    const modalContent = document.getElementById("modalContent");
+    modalContent.innerHTML = "";
+    modalContent.innerHTML =
+        `
+        <div class="p-5 md:p-8 rounded-2xl bg-rose-50 border-2 border-rose-500">
+        <h2 class="font-semibold text-2xl text-slate-800 dark:text-slate-50 mb-6">${data.description}</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="rounded-2xl bg-white text-center p-5 w-full">
+                <h5 class="font-bold text-green-500">${data.pricing[0].price}
+                ${data.pricing[0].plan}</h5>
+            </div>
+            <div class="rounded-2xl bg-white text-center p-5 w-full">
+                <h5 class="font-bold text-orange-500">${data.pricing[1].price}
+                ${data.pricing[1].plan}</h5>
+            </div>
+            <div class="rounded-2xl bg-white text-center p-5 w-full">
+                <h5 class="font-bold text-red-500">${data.pricing[2].price}
+                ${data.pricing[2].plan}</h5>
+            </div>
+        </div>
+        <div class="grid  grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <h2 class="font-semibold text-2xl text-slate-800 dark:text-slate-50 mt-6 mb-4">Features</h2>
+                <ul class="list-disc list-inside">
+                    <li>${data.features[1].feature_name}</li>
+                    <li>${data.features[2].feature_name}</li>
+                    <li>${data.features[3].feature_name}</li>
+                </ul>
+            </div>
+            <div>
+                <h2 class="font-semibold text-2xl text-slate-800 dark:text-slate-50 mt-6 mb-4">Integrations</h2>
+                <ul class="list-disc list-inside">
+                    <li>${data.integrations[0]}</li>
+                    <li>${data.integrations[2]}</li>
+                    <li>${data.integrations[3]}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-5 md:p-8 rounded-2xl border-2 border-slate-300">
+        <figure class="relative">
+            <img class="rounded-xl w-full h-64 object-cover"
+                src="${data.image_link[0]}"
+                alt="">
+                <div class="bg-rose-500 text-slate-50 px-4 py-2 rounded-lg absolute top-3 right-3">
+                    <p class="font-semibold">${data.accuracy.score * 100}% accuracy</p>
+                </div>
+        </figure>
+        <h2 class="font-semibold text-2xl text-slate-800 dark:text-slate-50 mt-6 mb-4">${data.input_output_examples[0].input}</h2>
+        <p>${data.input_output_examples[0].output}</p>
+    </div>
+        `;
+
+    // modalContent.appendChild(modalBox);
+
+}
+function closeModal() {
+    document.getElementById("popupModal").classList.add("hidden");
+}
