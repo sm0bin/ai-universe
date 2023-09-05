@@ -1,11 +1,31 @@
-function fetchData() {
-    fetch("https://openapi.programming-hero.com/api/ai/tools")
-        .then(res => res.json())
-        .then(json => showCards(json.data.tools))
+let data = [];
+async function fetchData(showAll) {
+    const res = await fetch("https://openapi.programming-hero.com/api/ai/tools");
+    const json = await res.json();
+    data = json.data.tools;
+    showCards(json.data.tools, showAll);
 }
 
-function showCards(data) {
+
+const seeMoreBtn = document.getElementById("see-more");
+let seeMoreBtnToggler = false;
+seeMoreBtn.addEventListener("click", () => {
+    seeMoreBtnToggler = !seeMoreBtnToggler;
+    if (seeMoreBtnToggler) {
+        fetchData(seeMoreBtnToggler);
+        seeMoreBtn.innerText = "See Less";
+    } else {
+        fetchData(seeMoreBtnToggler);
+        seeMoreBtn.innerText = "See More";
+    }
+})
+
+function showCards(data, showAll) {
+    if (!showAll) {
+        data = data.slice(0, 6);
+    }
     const cardContainer = document.getElementById("card-container");
+    cardContainer.innerHTML = "";
     data.forEach(element => {
         const card = document.createElement("div");
         card.className = "bg-slate-50 shadow-md rounded-2xl p-6";
@@ -57,25 +77,17 @@ function showCards(data) {
 
 }
 
-function showDetails() {
-    // fetch("https://openapi.programming-hero.com/api/ai/tools")
-    //     .then(res => res.json())
-    //     .then(json => showCards(json.data.tools))
-
-}
 
 async function fetchDetails(id) {
     const res = await fetch(`https://openapi.programming-hero.com/api/ai/tool/${id}`);
     const json = await res.json();
-    // console.log(id, typeof (id));
-    // console.log(json.data);
     openModal(json.data)
 }
 
 fetchData()
 
 function openModal(data) {
-    console.log(data);
+    // console.log(data);
     document.getElementById("popupModal").classList.remove("hidden");
 
     // const modalBox = document.createElement("div");
@@ -87,17 +99,17 @@ function openModal(data) {
         <div class="p-5 md:p-8 rounded-2xl bg-rose-50 border-2 border-rose-500">
         <h2 class="font-semibold text-2xl text-slate-800 dark:text-slate-50 mb-6">${data.description}</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="rounded-2xl bg-white text-center p-5 w-full">
-                <h5 class="font-bold text-green-500">${data.pricing[0].price}
-                ${data.pricing[0].plan}</h5>
+            <div class="rounded-2xl bg-white text-center p-5 w-full flex items-center">
+                <h5 class="font-bold text-green-500">${data.pricing?.[0].price}
+                ${data.pricing?.[0].plan}</h5>
             </div>
-            <div class="rounded-2xl bg-white text-center p-5 w-full">
-                <h5 class="font-bold text-orange-500">${data.pricing[1].price}
-                ${data.pricing[1].plan}</h5>
+            <div class="rounded-2xl bg-white text-center p-5 w-full flex items-center">
+                <h5 class="font-bold text-orange-500">${data.pricing?.[1].price}
+                ${data.pricing?.[1].plan}</h5>
             </div>
-            <div class="rounded-2xl bg-white text-center p-5 w-full">
-                <h5 class="font-bold text-red-500">${data.pricing[2].price}
-                ${data.pricing[2].plan}</h5>
+            <div class="rounded-2xl bg-white text-center p-5 w-full flex items-center">
+                <h5 class="font-bold text-red-500">${data.pricing?.[2].price}
+                ${data.pricing?.[2].plan}</h5>
             </div>
         </div>
         <div class="grid  grid-cols-1 md:grid-cols-2 gap-4">
@@ -112,9 +124,9 @@ function openModal(data) {
             <div>
                 <h2 class="font-semibold text-2xl text-slate-800 dark:text-slate-50 mt-6 mb-4">Integrations</h2>
                 <ul class="list-disc list-inside">
-                    <li>${data.integrations[0]}</li>
-                    <li>${data.integrations[2]}</li>
-                    <li>${data.integrations[3]}</li>
+                    <li>${data.integrations?.[0]}</li>
+                    <li>${data.integrations?.[1]}</li>
+                    <li>${data.integrations?.[2]}</li>
                 </ul>
             </div>
         </div>
@@ -126,17 +138,18 @@ function openModal(data) {
                 src="${data.image_link[0]}"
                 alt="">
                 <div class="bg-rose-500 text-slate-50 px-4 py-2 rounded-lg absolute top-3 right-3">
-                    <p class="font-semibold">${data.accuracy.score * 100}% accuracy</p>
+                    <p class="font-semibold">${data.accuracy?.score * 100}% accuracy</p>
                 </div>
         </figure>
-        <h2 class="font-semibold text-2xl text-slate-800 dark:text-slate-50 mt-6 mb-4">${data.input_output_examples[0].input}</h2>
-        <p>${data.input_output_examples[0].output}</p>
+        <h2 class="font-semibold text-2xl text-slate-800 dark:text-slate-50 mt-6 mb-4">${data.input_output_examples?.[0].input}</h2>
+        <p>${data.input_output_examples?.[0].output}</p>
     </div>
         `;
 
     // modalContent.appendChild(modalBox);
 
 }
+
 function closeModal() {
     document.getElementById("popupModal").classList.add("hidden");
 }
