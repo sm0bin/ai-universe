@@ -1,34 +1,33 @@
 let data = [];
-async function fetchData(showAll) {
+let isSortByDate = false;
+let isShowAll = false;
+
+async function fetchData(isSortByDate, isShowAll) {
     const res = await fetch("https://openapi.programming-hero.com/api/ai/tools");
     const json = await res.json();
     data = json.data.tools;
-    showCards(json.data.tools, showAll);
+    showCards(json.data.tools, isSortByDate, isShowAll);
 }
+fetchData()
 
-
-const seeMoreBtn = document.getElementById("see-more");
-let seeMoreBtnToggler = false;
-seeMoreBtn.addEventListener("click", () => {
-    seeMoreBtnToggler = !seeMoreBtnToggler;
-    if (seeMoreBtnToggler) {
-        fetchData(seeMoreBtnToggler);
-        seeMoreBtn.innerText = "See Less";
-    } else {
-        fetchData(seeMoreBtnToggler);
-        seeMoreBtn.innerText = "See More";
-    }
+document.getElementById("sort-by-date").addEventListener("click", () => {
+    isSortByDate = !isSortByDate;
+    fetchData(isSortByDate, isShowAll);
 })
 
-function showCards(data, showAll) {
-    if (!showAll) {
+function showCards(data, isSortByDate, isShowAll) {
+
+    if (isSortByDate) {
+        data.sort((a, b) => parseDate(b.published_in) - parseDate(a.published_in));
+    }
+    if (!isShowAll) {
         data = data.slice(0, 6);
     }
     const cardContainer = document.getElementById("card-container");
     cardContainer.innerHTML = "";
     data.forEach(element => {
         const card = document.createElement("div");
-        card.className = "bg-slate-50 shadow-md rounded-2xl p-6";
+        card.className = "bg-slate-50 dark:bg-slate-700 shadow-md rounded-2xl p-6";
         card.innerHTML =
             `
             <figure class="">
@@ -77,26 +76,25 @@ function showCards(data, showAll) {
 
 }
 
-
 async function fetchDetails(id) {
     const res = await fetch(`https://openapi.programming-hero.com/api/ai/tool/${id}`);
     const json = await res.json();
     openModal(json.data)
 }
 
-fetchData()
-
 function openModal(data) {
-    // console.log(data);
     document.getElementById("popupModal").classList.remove("hidden");
-
-    // const modalBox = document.createElement("div");
-    // modalBox.classList = "grid grid-cols-1 lg:grid-cols-2 gap-5";
+    const modalBox = document.createElement("div");
+    modalBox.classList = "grid grid-cols-1 lg:grid-cols-2 gap-5";
     const modalContent = document.getElementById("modalContent");
+    const accuracyDiv = data.accuracy?.score ?
+        `<div class="bg-rose-500 text-slate-50 px-4 py-2 rounded-lg absolute top-3 right-3">
+            <p class="font-semibold">${data.accuracy?.score * 100}% accuracy</p>
+        </div>`: '';
     modalContent.innerHTML = "";
     modalContent.innerHTML =
         `
-        <div class="p-5 md:p-8 rounded-2xl bg-rose-50 border-2 border-rose-500">
+        <div class="p-5 md:p-8 rounded-2xl bg-rose-50 dark:bg-rose-500/20 border-2 border-rose-500">
         <h2 class="font-semibold text-2xl text-slate-800 dark:text-slate-50 mb-6">${data.description}</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="rounded-2xl bg-white text-center p-5 w-full flex items-center">
@@ -132,24 +130,39 @@ function openModal(data) {
         </div>
     </div>
 
-    <div class="p-5 md:p-8 rounded-2xl border-2 border-slate-300">
+    <div class="p-5 md:p-8 rounded-2xl border-2 dark:bg-slate-800 border-slate-300">
         <figure class="relative">
             <img class="rounded-xl w-full h-64 object-cover"
                 src="${data.image_link[0]}"
                 alt="">
-                <div class="bg-rose-500 text-slate-50 px-4 py-2 rounded-lg absolute top-3 right-3">
-                    <p class="font-semibold">${data.accuracy?.score * 100}% accuracy</p>
-                </div>
+                ${accuracyDiv}
         </figure>
         <h2 class="font-semibold text-2xl text-slate-800 dark:text-slate-50 mt-6 mb-4">${data.input_output_examples?.[0].input}</h2>
         <p>${data.input_output_examples?.[0].output}</p>
     </div>
         `;
 
-    // modalContent.appendChild(modalBox);
+    modalContent.appendChild(modalBox);
 
 }
 
 function closeModal() {
     document.getElementById("popupModal").classList.add("hidden");
 }
+
+function parseDate(date) {
+    const [month, day, year] = date.split("/");
+    return new Date(`${year}-${month}-${day}`);
+}
+
+const seeMoreBtn = document.getElementById("see-more");
+seeMoreBtn.addEventListener("click", () => {
+    isShowAll = !isShowAll;
+    if (isShowAll) {
+        fetchData(isSortByDate, isShowAll);
+        seeMoreBtn.innerText = "See Less";
+    } else {
+        fetchData(isSortByDate, isShowAll);
+        seeMoreBtn.innerText = "See More";
+    }
+})
