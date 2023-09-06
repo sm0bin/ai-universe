@@ -58,8 +58,8 @@ function showCards(data, isSortByDate, isShowAll) {
                             <p>${element.published_in}</p>
                         </div>
                     </div>
-                    <button class="bg-slate-200 hover:bg-slate-500 p-3 rounded-full" onclick="fetchDetails('${element.id}')">
-                        <svg class="fill-current text-slate-500 hover:text-slate-50"
+                    <button class="bg-slate-200 hover:bg-slate-500 dark:bg-slate-500 dark:hover:bg-slate-200 p-3 rounded-full" onclick="fetchDetails('${element.id}')">
+                        <svg class="fill-current text-slate-500 hover:text-slate-50  dark:text-slate-50 dark:hover:text-slate-500"
                             xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
                             <path
                                 d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z">
@@ -130,7 +130,7 @@ function openModal(data) {
         </div>
     </div>
 
-    <div class="p-5 md:p-8 rounded-2xl border-2 dark:bg-slate-800 border-slate-300">
+    <div class="p-5 md:p-8 rounded-2xl border-2 dark:bg-slate-700 border-slate-300">
         <figure class="relative">
             <img class="rounded-xl w-full h-64 object-cover"
                 src="${data.image_link[0]}"
